@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}Home · FastAPI Blog{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 fw-semibold">Latest Posts</h1>
+
+{% for post in posts %}
+    <div class="post-card">
+        <div class="post-title">{{ post.title }}</div>
+        <div class="post-meta">
+            By {{ post.author }} · {{ post.date_posted }}
+        </div>
+        <div class="post-content">
+            {{ post.content }}
+        </div>
+    </div>
+{% else %}
+    <p class="text-muted">No posts available.</p>
+{% endfor %}
+{% endblock %}
