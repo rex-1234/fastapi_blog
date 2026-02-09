@@ -68,10 +68,33 @@ body {
     color: var(--text-primary);
 }
 
+/* Profile picture */
+.profile-pic {
+    object-fit: cover;
+    border: 1px solid #e5e5e7;
+}
+
+/* Author link */
+.post-meta a {
+    color: var(--text-primary);
+}
+
+.post-meta a:hover {
+    text-decoration: underline;
+}
+
 /* Footer */
 .footer {
     text-align: center;
     font-size: 0.85rem;
     color: var(--text-secondary);
     padding: 2rem 0;
+}
+
+/* Error page */
+.error-code {
+    font-size: 4rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--text-secondary);
 }
