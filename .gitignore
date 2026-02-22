@@ -57,6 +57,7 @@ instance/
 *.sqlite
 *.sqlite3
 site.db
+blog.db
 
 ############################
 # Jupyter / IPython
