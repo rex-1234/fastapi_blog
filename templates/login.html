@@ -1,0 +1,95 @@
+{% extends "layout.html" %} {% block title %}Login · FastAPI Blog{% endblock %}
+{% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title mb-4 text-center">Welcome Back</h2>
+
+    <form id="loginForm" novalidate>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control form-control-lg"
+          id="email"
+          name="username"
+          required
+        />
+      </div>
+
+      <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control form-control-lg"
+          id="password"
+          name="password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-dark w-100 rounded-pill py-2">
+        Login
+      </button>
+    </form>
+
+    <p class="mt-4 text-center text-muted">
+      Don’t have an account?
+      <a
+        href="{{ url_for('register_page') }}"
+        class="fw-medium text-decoration-none"
+      >
+        Register here
+      </a>
+    </p>
+  </div>
+</div>
+{% endblock content %} {% block scripts %}
+<script type="module">
+  import { getErrorMessage, showModal } from "/static/js/utils.js";
+
+  const loginForm = document.getElementById("loginForm");
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(loginForm);
+
+      try {
+        const response = await fetch("/api/users/token", {
+          method: "POST",
+          body: formData, // still using OAuth2PasswordRequestForm
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+
+          // Store token in local storage
+          localStorage.setItem("access_token", data.access_token);
+
+          document.getElementById("successMessage").textContent =
+            "Login successful!";
+          showModal("successModal");
+
+          document.getElementById("successModal").addEventListener(
+            "hidden.bs.modal",
+            () => {
+              window.location.href = "/";
+            },
+            { once: true },
+          );
+        } else {
+          const error = await response.json();
+          document.getElementById("errorMessage").textContent =
+            getErrorMessage(error);
+          showModal("errorModal");
+        }
+      } catch {
+        document.getElementById("errorMessage").textContent =
+          "Network error. Please check your connection and try again.";
+        showModal("errorModal");
+      }
+    });
+  }
+</script>
+{% endblock scripts %}

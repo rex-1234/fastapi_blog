@@ -70,23 +70,48 @@
           </ul>
 
           <!-- RIGHT SIDE -->
-          <ul class="navbar-nav ms-auto align-items-center gap-3">
-            <li class="nav-item">
+          <ul class="navbar-nav ms-auto align-items-center gap-2">
+            <!-- Logged In -->
+            <li
+              class="nav-item d-none align-items-center gap-2"
+              id="loggedInNav"
+            >
               <button
-                class="btn btn-outline-dark btn-sm px-3 rounded-pill"
+                class="btn btn-outline-dark btn-sm rounded-pill px-3"
+                type="button"
                 data-bs-toggle="modal"
                 data-bs-target="#createPostModal"
               >
                 New Post
               </button>
+
+              <button
+                class="btn btn-outline-dark btn-sm rounded-pill px-3"
+                type="button"
+                id="logoutBtn"
+              >
+                Logout
+              </button>
+
+              <span id="usernameDisplay" class="navbar-text small text-muted">
+              </span>
             </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="#">Login</a>
-            </li>
+            <!-- Logged Out -->
+            <li class="nav-item align-items-center gap-2" id="loggedOutNav">
+              <a
+                class="btn btn-outline-dark btn-sm rounded-pill px-3"
+                href="{{ url_for('login_page') }}"
+              >
+                Login
+              </a>
 
-            <li class="nav-item">
-              <a class="nav-link" href="#">Register</a>
+              <a
+                class="btn btn-dark btn-sm rounded-pill px-3"
+                href="{{ url_for('register_page') }}"
+              >
+                Register
+              </a>
             </li>
           </ul>
         </div>
@@ -183,6 +208,35 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Auth State Management -->
+    <script type="module">
+      import { getCurrentUser, logout } from "/static/js/auth.js";
+
+      // Update navbar based on auth state
+      async function updateAuthUI() {
+        const user = await getCurrentUser();
+        const loggedInNav = document.getElementById("loggedInNav");
+        const loggedOutNav = document.getElementById("loggedOutNav");
+
+        if (user) {
+          loggedInNav.classList.remove("d-none");
+          loggedInNav.classList.add("d-flex");
+          loggedOutNav.classList.add("d-none");
+          document.getElementById("usernameDisplay").textContent = user.email;
+        } else {
+          loggedInNav.classList.add("d-none");
+          loggedInNav.classList.remove("d-flex");
+          loggedOutNav.classList.remove("d-none");
+        }
+      }
+
+      // Logout handler
+      document.getElementById("logoutBtn").addEventListener("click", logout);
+
+      // Update UI on page load
+      updateAuthUI();
+    </script>
 
     <!-- Create Post Form Handler -->
     <script type="module">
