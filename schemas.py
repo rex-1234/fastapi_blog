@@ -6,7 +6,7 @@ class UserBase(BaseModel):
     email: EmailStr = Field(max_length=100)
 
 class UserCreate(UserBase):
-    password: str = Field(min_lenght=8)
+    password: str = Field(min_length=8)
 
 class UserUpdate(BaseModel):
     username: str | None = Field(default=None, min_length=1, max_length=50)
@@ -33,7 +33,7 @@ class PostBase(BaseModel):
     content: str = Field(min_length=1)
 
 class PostCreate(PostBase):
-    user_id: int    # Temporary
+    pass
 
 class PostUpdate(BaseModel):
     title: str | None = Field(default=None, min_length=1, max_length=100)
